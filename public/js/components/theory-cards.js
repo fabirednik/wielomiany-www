@@ -10,7 +10,7 @@ import { createDecorativeSvg, createElement } from '../utils/dom.js';
  * @param {HTMLElement} liveRegion
  * @returns {HTMLElement}
  */
-function createFormulaCard(formula, index, strings, liveRegion) {
+function createFormulaCard(formula, strings, liveRegion) {
   const copyIcon = createDecorativeSvg(
     [
       'M9 9h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z',
@@ -43,18 +43,12 @@ function createFormulaCard(formula, index, strings, liveRegion) {
     announcementError: strings.accessibility.copyAnnouncementError,
   });
 
-  const indexLabel = String(index + 1).padStart(2, '0');
-
   const header = createElement(
     'header',
     { className: 'formula-card__header' },
     createElement(
       'div',
       { className: 'formula-card__title-group' },
-      createElement('span', {
-        className: 'formula-card__index',
-        text: `${indexLabel} // ${formula.badge}`,
-      }),
       createElement('h4', { className: 'formula-card__title', text: formula.title })
     ),
     copyButton
@@ -87,7 +81,7 @@ function createFormulaCard(formula, index, strings, liveRegion) {
     'article',
     {
       className: 'formula-card',
-      dataset: { formulaId: formula.id, cardOrder: String(index + 1) },
+      dataset: { formulaId: formula.id },
     },
     header,
     mathBlock,
@@ -104,22 +98,12 @@ function createFormulaCard(formula, index, strings, liveRegion) {
 export function createTheoryCards(strings) {
   const sectionHeader = createElement(
     'div',
-    { className: 'section-header-grid' },
-    createElement(
-      'div',
-      { className: 'section-header-grid__main' },
-      createElement('p', { className: 'section-index', text: `02 // ${strings.theory.eyebrow}` }),
-      createElement('h2', {
-        className: 'section-title',
-        text: strings.theory.title,
-        attrs: { id: 'theory-heading' },
-      })
-    ),
-    createElement(
-      'div',
-      { className: 'section-header-grid__aside' },
-      createElement('p', { className: 'section-description', text: strings.theory.description })
-    )
+    { className: 'section-header' },
+    createElement('h2', {
+      className: 'section-title',
+      text: strings.theory.title,
+      attrs: { id: 'theory-heading' },
+    })
   );
 
   const liveRegion = createElement('div', {
@@ -127,7 +111,6 @@ export function createTheoryCards(strings) {
     attrs: { 'aria-live': 'polite', role: 'status' },
   });
 
-  let runningIndex = 0;
   const groupElements = strings.theory.groups.map((group) => {
     const gridModifier =
       group.formulas.length === 3 ? 'cards-grid--asym-three' : 'cards-grid--asym-four';
@@ -135,11 +118,7 @@ export function createTheoryCards(strings) {
     const grid = createElement(
       'div',
       { className: `cards-grid ${gridModifier}` },
-      ...group.formulas.map((formula) => {
-        const card = createFormulaCard(formula, runningIndex, strings, liveRegion);
-        runningIndex += 1;
-        return card;
-      })
+      ...group.formulas.map((formula) => createFormulaCard(formula, strings, liveRegion))
     );
 
     return createElement(

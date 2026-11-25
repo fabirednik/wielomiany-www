@@ -5,7 +5,7 @@
  */
 export const STRINGS_PL = Object.freeze({
   meta: {
-    pageTitle: 'wielomiany — Wzory skróconego mnożenia',
+    pageTitle: 'Wielomiany - Wzory skróconego mnożenia',
     pageDescription:
       'Nowoczesna aplikacja edukacyjna prezentująca wzory skróconego mnożenia, wizualizację geometryczną oraz interaktywny generator rozwinięć z użyciem trójkąta Pascala.',
   },
@@ -16,7 +16,7 @@ export const STRINGS_PL = Object.freeze({
     copyAnnouncementError: 'Nie udało się skopiować kodu do schowka.',
   },
   nav: {
-    brandTitle: 'wielomiany',
+    brandTitle: 'Wielomiany',
     links: {
       video: 'Wizualizacja',
       theory: 'Wzory',
@@ -24,7 +24,6 @@ export const STRINGS_PL = Object.freeze({
     },
   },
   hero: {
-    eyebrow: 'Kompendium algebry i wielomianów',
     titlePrefix: 'Odkryj piękno ',
     titleHighlight: 'wzorów skróconego mnożenia',
     subtitle:
@@ -35,7 +34,6 @@ export const STRINGS_PL = Object.freeze({
     previewCaption: 'Pole kwadratu o boku (a + b) dzieli się na cztery obszary.',
   },
   video: {
-    eyebrow: 'Animacja matematyczna',
     title: 'Geometryczny dowód i intuicja',
     description:
       'Zamiast mechanicznego przekształcania nawiasów zobacz, jak składniki wielomianu odpowiadają konkretnym polom figur i objętościom brył.',
@@ -48,10 +46,7 @@ export const STRINGS_PL = Object.freeze({
       'Twoja przeglądarka nie obsługuje osadzonego odtwarzacza wideo HTML5.',
   },
   theory: {
-    eyebrow: 'Baza wiedzy',
     title: 'Najważniejsze wzory skróconego mnożenia',
-    description:
-      'Zestawienie siedmiu fundamentalnych tożsamości drugiego i trzeciego stopnia wraz z krótkim wyjaśnieniem oraz przykładem zastosowania.',
     copyLabel: 'Kopiuj LaTeX',
     copiedLabel: 'Skopiowano',
     exampleLabel: 'Przykład:',
@@ -62,7 +57,6 @@ export const STRINGS_PL = Object.freeze({
         formulas: [
           {
             id: 'square-sum',
-            badge: 'Stopień 2',
             title: 'Kwadrat sumy',
             latex: '(a + b)^2 = a^2 + 2ab + b^2',
             description:
@@ -71,7 +65,6 @@ export const STRINGS_PL = Object.freeze({
           },
           {
             id: 'square-diff',
-            badge: 'Stopień 2',
             title: 'Kwadrat różnicy',
             latex: '(a - b)^2 = a^2 - 2ab + b^2',
             description:
@@ -80,7 +73,6 @@ export const STRINGS_PL = Object.freeze({
           },
           {
             id: 'diff-squares',
-            badge: 'Stopień 2',
             title: 'Różnica kwadratów',
             latex: 'a^2 - b^2 = (a - b)(a + b)',
             description:
@@ -95,7 +87,6 @@ export const STRINGS_PL = Object.freeze({
         formulas: [
           {
             id: 'cube-sum',
-            badge: 'Stopień 3',
             title: 'Sześcian sumy',
             latex: '(a + b)^3 = a^3 + 3a^2b + 3ab^2 + b^3',
             description:
@@ -104,7 +95,6 @@ export const STRINGS_PL = Object.freeze({
           },
           {
             id: 'cube-diff',
-            badge: 'Stopień 3',
             title: 'Sześcian różnicy',
             latex: '(a - b)^3 = a^3 - 3a^2b + 3ab^2 - b^3',
             description:
@@ -113,7 +103,6 @@ export const STRINGS_PL = Object.freeze({
           },
           {
             id: 'sum-cubes',
-            badge: 'Stopień 3',
             title: 'Suma sześcianów',
             latex: 'a^3 + b^3 = (a + b)(a^2 - ab + b^2)',
             description:
@@ -122,7 +111,6 @@ export const STRINGS_PL = Object.freeze({
           },
           {
             id: 'diff-cubes',
-            badge: 'Stopień 3',
             title: 'Różnica sześcianów',
             latex: 'a^3 - b^3 = (a - b)(a^2 + ab + b^2)',
             description:
@@ -134,10 +122,7 @@ export const STRINGS_PL = Object.freeze({
     ],
   },
   generator: {
-    eyebrow: 'Laboratorium dwumianu Newtona',
     title: 'Interaktywny generator z trójkąta Pascala',
-    description:
-      'Przesuwaj suwak lub kliknij dowolny wiersz trójkąta Pascala, aby obliczyć współczynniki i wygenerować pełny wzór rozwinięcia (a + b)ⁿ.',
     sliderLabel: 'Wykładnik potęgi n',
     sliderAriaValuePrefix: 'Wykładnik potęgi n wynosi',
     exponentBadgePrefix: 'n =',
@@ -150,7 +135,7 @@ export const STRINGS_PL = Object.freeze({
     triangleHint: 'Kliknij wiersz, aby wybrać odpowiedni wykładnik potęgi.',
     rowAriaPrefix: 'Wybierz wiersz trójkąta Pascala dla n =',
     formulaHeading: 'Wygenerowany wzór rozwinięty',
-    copyLatexLabel: 'Kopiuj wynik',
+    copyLatexLabel: 'Kopiuj LaTeX',
     copiedLatexLabel: 'Skopiowano',
   },
   footer: {

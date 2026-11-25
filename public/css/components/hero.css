@@ -34,6 +34,7 @@
   letter-spacing: -0.045em;
   text-transform: uppercase;
   max-width: 16ch;
+  color: var(--ink-primary);
 }
 
 .hero-title__accent {

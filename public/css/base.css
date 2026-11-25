@@ -20,7 +20,7 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   color: var(--ink-primary);
-  background-color: var(--bg-canvas);
+  background-color: var(--bg-backdrop);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -95,12 +95,22 @@ button {
   text-transform: uppercase;
 }
 
-/* Full-Bleed Structural Shell */
+/* Bounded Structural Shell (edge-to-edge on small screens, framed margins on desktop) */
 .app-shell {
+  width: 100%;
   min-height: 100vh;
+  margin-inline: auto;
   display: flex;
   flex-direction: column;
   background-color: var(--bg-canvas);
+}
+
+@media (min-width: 1080px) {
+  .app-shell {
+    width: calc(100% - 2rem);
+    max-width: var(--site-max-width);
+    border-inline: 1px solid var(--rule-color);
+  }
 }
 
 .main-content {
@@ -117,49 +127,14 @@ button {
   background-color: var(--bg-canvas);
 }
 
-/* Brutalist Editorial Index & Asymmetrical Section Header Grid */
-.section-index {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--accent-signal);
-  margin-bottom: 1rem;
-}
-
-.section-header-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+/* Full-Width Section Header Band */
+.section-header {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(2.25rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 3.5rem);
   border-bottom: 1px solid var(--rule-color);
-  background-color: var(--bg-surface);
-}
-
-@media (min-width: 900px) {
-  .section-header-grid {
-    grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
-  }
-}
-
-.section-header-grid__main {
-  min-width: 0;
-  padding: clamp(2.5rem, 6vw, 5.5rem) clamp(1.25rem, 4vw, 3.5rem);
-}
-
-.section-header-grid__aside {
-  min-width: 0;
-  padding: clamp(1.25rem, 3vw, 2.5rem) clamp(1.25rem, 3vw, 2rem);
-  border-top: 1px solid var(--rule-color);
-  display: flex;
-  align-items: flex-end;
-  background-color: var(--bg-canvas);
-}
-
-@media (min-width: 900px) {
-  .section-header-grid__aside {
-    border-top: 0;
-    border-left: 1px solid var(--rule-color);
-  }
+  background-color: var(--accent-signal);
+  color: var(--accent-signal-ink);
 }
 
 .section-title {
@@ -168,11 +143,12 @@ button {
   line-height: 0.96;
   letter-spacing: -0.04em;
   text-transform: uppercase;
+  color: inherit;
 }
 
 .section-description {
   font-size: 0.9375rem;
-  color: var(--ink-secondary);
+  color: var(--ink-primary);
   line-height: 1.5;
 }
 

@@ -70,6 +70,7 @@ VIEWPORTS = [
     ("mobile-lg", 414, 896),
     ("tablet", 768, 1024),
     ("desktop", 1280, 800),
+    ("desktop-xl", 1600, 900),
 ]
 
 POLISH_DIACRITICS_RE = re.compile(r"[ąćęłńóśźżĄĆĘŁŃÓŚŹŻ]")
@@ -631,12 +632,12 @@ def run() -> int:
                 verify_dom_semantics(page, errors)
 
                 title = page.title()
-                if "wielomiany" not in title or "Wzory skróconego mnożenia" not in title:
+                if title != "Wielomiany - Wzory skróconego mnożenia":
                     errors.append(f"Unexpected document title: {title!r}")
 
-                brand_title = (page.locator(".brand-mark__title").text_content() or "").strip()
-                if brand_title != "wielomiany":
-                    errors.append(f"Unexpected brand title: {brand_title!r}")
+                brand_title = page.locator(".brand-mark__title").inner_text().strip()
+                if brand_title != "Wielomiany":
+                    errors.append(f"Unexpected rendered brand title: {brand_title!r}")
 
                 for selector, min_count in (
                     ("header.site-header", 1),
@@ -670,13 +671,105 @@ def run() -> int:
                 if "©" not in footer_text or "współtwórców github" not in footer_text:
                     errors.append(f"Footer missing copyright or contributors note: {footer_text!r}")
 
-                # Verify removed "Kod LaTeX:" raw box and removed hero metrics table are absent
+                footer_centered = page.evaluate(
+                    """() => {
+                        const footer = document.querySelector('footer.site-footer');
+                        const inner = document.querySelector('.site-footer__inner');
+                        const copy = document.querySelector('.site-footer__copy');
+                        if (!footer || !inner || !copy) return false;
+                        const fr = footer.getBoundingClientRect();
+                        const cr = copy.getBoundingClientRect();
+                        const footerMid = (fr.left + fr.right) / 2;
+                        const copyMid = (cr.left + cr.right) / 2;
+                        return getComputedStyle(inner).justifyContent === 'center' && Math.abs(footerMid - copyMid) <= 2;
+                    }"""
+                )
+                if not footer_centered:
+                    errors.append("Footer content is not centered")
+
+                # Verify removed elements are absent
                 if page.locator(".generator-output__raw").count() != 0:
                     errors.append("Removed .generator-output__raw frame still present in DOM")
                 if page.locator(".hero-metrics").count() != 0:
                     errors.append("Removed .hero-metrics table still present in DOM")
                 if page.locator(".video-rail__spec").count() != 0:
                     errors.append("Removed .video-rail__spec element still present in DOM")
+                if page.locator(".section-index, .formula-card__index").count() != 0:
+                    errors.append("Removed section/formula index labels (00 // ...) still present in DOM")
+                if page.locator(".section-header-grid, .section-header-grid__aside").count() != 0:
+                    errors.append("Removed split section header aside containers still present in DOM")
+                header_widths = page.evaluate(
+                    """() => {
+                        const shell = document.querySelector('#app');
+                        const shellW = shell ? shell.clientWidth : window.innerWidth;
+                        return [...document.querySelectorAll('#theory-section .section-header, #generator-section .section-header')].map(el => ({
+                            w: Math.round(el.getBoundingClientRect().width),
+                            shellW
+                        }));
+                    }"""
+                )
+                if len(header_widths) != 2 or any(abs(item["w"] - item["shellW"]) > 2 for item in header_widths):
+                    errors.append(f"Expected 2 full-width .section-header containers matching #app width, got {header_widths}")
+
+                # Verify desktop shell has balanced side margins on large viewports
+                shell_bounds = page.evaluate(
+                    """() => {
+                        const r = document.querySelector('#app').getBoundingClientRect();
+                        return { left: Math.round(r.left), right: Math.round(r.right), width: Math.round(r.width), vw: window.innerWidth };
+                    }"""
+                )
+                if shell_bounds["left"] < 12 or shell_bounds["width"] >= shell_bounds["vw"]:
+                    errors.append(f"Expected side margins on 1280px desktop, got {shell_bounds}")
+
+                # Verify all 7 formula cards share the exact same background color
+                card_bgs = page.evaluate(
+                    """() => [...document.querySelectorAll('#theory-section .formula-card')].map(el => getComputedStyle(el).backgroundColor)"""
+                )
+                if len(set(card_bgs)) != 1:
+                    errors.append(f"Expected identical background across all 7 formula cards, got {card_bgs}")
+
+                # Verify generator copy button starts with "Kopiuj LaTeX"
+                gen_copy_label = (page.locator(".generator-output .copy-btn").text_content() or "").strip()
+                if gen_copy_label != "Kopiuj LaTeX":
+                    errors.append(f"Expected generator copy button label 'Kopiuj LaTeX', got {gen_copy_label!r}")
+
+                # Verify ONLY Theory and Generator section headers sit on orange background (#FF5500)
+                orange_title_issues = page.evaluate(
+                    """() => {
+                        const orange = 'rgb(255, 85, 0)';
+                        const orangeTargets = [
+                            document.querySelector('#theory-section .section-header'),
+                            document.querySelector('#generator-section .section-header'),
+                        ];
+                        const nonOrangeTargets = [
+                            document.querySelector('.hero-title'),
+                            document.querySelector('#video-section .video-rail'),
+                        ];
+                        const issues = [];
+                        for (const el of orangeTargets) {
+                            if (!el) {
+                                issues.push('Missing orange title container');
+                                continue;
+                            }
+                            const bg = getComputedStyle(el).backgroundColor;
+                            if (bg !== orange) {
+                                issues.push('Expected orange background ' + orange + ' on ' + el.className + ', got ' + bg);
+                            }
+                        }
+                        for (const el of nonOrangeTargets) {
+                            if (!el) {
+                                issues.push('Missing non-orange title container');
+                                continue;
+                            }
+                            const bg = getComputedStyle(el).backgroundColor;
+                            if (bg === orange) {
+                                issues.push('Unexpected orange background on ' + el.className);
+                            }
+                        }
+                        return issues;
+                    }"""
+                )
+                errors.extend(orange_title_issues)
 
                 # Verify brutalist invariants (0px border-radius, none box-shadow, no backdrop-filter)
                 brutalist_issues = page.evaluate(
@@ -717,6 +810,22 @@ def run() -> int:
 
                 print("  [3/7] Verifying real MathJax LaTeX rendering & font loading...")
                 verify_mathjax_rendering(page, errors)
+                desktop_scroll_issues = page.evaluate(
+                    """() => {
+                        const issues = [];
+                        for (const el of document.querySelectorAll('.formula-card__math, .formula-card__example, .formula-card__example-math, .generator-output__math')) {
+                            const cs = getComputedStyle(el);
+                            if (cs.overflowX === 'auto' || cs.overflowX === 'scroll') {
+                                issues.push('Desktop horizontal scroll enabled on ' + el.className);
+                            }
+                            if (el.scrollWidth > el.clientWidth + 1) {
+                                issues.push('Desktop formula overflow inside ' + el.className + ': ' + el.scrollWidth + ' > ' + el.clientWidth);
+                            }
+                        }
+                        return issues;
+                    }"""
+                )
+                errors.extend(desktop_scroll_issues)
                 if len(loaded_font_urls) == 0:
                     errors.append("No MathJax .woff font files were loaded with HTTP 200")
                 verify_accessibility_and_targets(page, errors, check_skip_link=True)

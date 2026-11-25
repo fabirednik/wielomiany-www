@@ -58,6 +58,7 @@
 
 :root {
   /* Harsh Flat High-Contrast Surfaces */
+  --bg-backdrop: #DBD9D2;
   --bg-canvas: #E8E7E2;
   --bg-surface: #F4F3EE;
   --bg-contrast: #FFFFFF;
@@ -70,13 +71,14 @@
   --ink-inverse: #F4F3EE;
   --rule-color: #111111;
 
-  /* Single Solid Aggressive Accent (Swiss Signal Red) */
-  --accent-signal: #FF2400;
-  --accent-signal-ink: #FFFFFF;
+  /* Single Solid Aggressive Accent (Swiss Brutalist Orange) */
+  --accent-signal: #FF5500;
+  --accent-signal-ink: #111111;
 
-  /* Zero Rounded Corners & Zero Shadows */
+  /* Zero Rounded Corners, Zero Shadows & Max Container Width */
   --radius-none: 0;
   --header-height: 3.75rem;
+  --site-max-width: 90rem;
 
   /* Geometric Sans & Technical Monospace */
   --font-sans: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;

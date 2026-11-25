@@ -14,7 +14,6 @@ export function createVideoPlayer(strings) {
   const sectionHeader = createElement(
     'div',
     { className: 'video-rail' },
-    createElement('p', { className: 'section-index', text: `01 // ${strings.video.eyebrow}` }),
     createElement('h2', {
       className: 'section-title',
       text: strings.video.title,

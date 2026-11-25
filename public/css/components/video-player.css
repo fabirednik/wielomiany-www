@@ -22,6 +22,7 @@
   justify-content: center;
   gap: 1.25rem;
   background-color: var(--bg-surface);
+  color: var(--ink-primary);
   border-bottom: 1px solid var(--rule-color);
 }
 

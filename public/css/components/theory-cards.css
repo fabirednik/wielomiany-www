@@ -67,7 +67,6 @@
   .cards-grid--asym-three .formula-card:nth-child(3) {
     grid-column: span 12;
     border-right: 0;
-    background-color: var(--bg-contrast);
   }
 
   .cards-grid--asym-four .formula-card:nth-child(1) {
@@ -80,12 +79,12 @@
   }
 
   .cards-grid--asym-four .formula-card:nth-child(3) {
-    grid-column: span 8;
+    grid-column: span 7;
     border-bottom: 0;
   }
 
   .cards-grid--asym-four .formula-card:nth-child(4) {
-    grid-column: span 4;
+    grid-column: span 5;
     border-right: 0;
     border-bottom: 0;
   }
@@ -105,15 +104,6 @@
   gap: 0.3rem;
 }
 
-.formula-card__index {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--accent-signal);
-}
-
 .formula-card__title {
   font-size: clamp(1.25rem, 2.2vw, 1.75rem);
   font-weight: 700;
@@ -123,12 +113,11 @@
 
 .formula-card__math {
   max-width: 100%;
-  padding: 1.25rem 1rem;
+  padding: 1.15rem 0.75rem;
   background-color: var(--bg-contrast);
   border: 1px solid var(--rule-color);
   color: var(--ink-primary);
   font-size: clamp(1rem, 1.6vw, 1.2rem);
-  overflow-x: auto;
   overflow-wrap: anywhere;
   text-align: left;
 }
@@ -139,9 +128,9 @@
   gap: 0.875rem;
 }
 
-@container (min-width: 620px) {
+@container (min-width: 660px) {
   .formula-card__meta {
-    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
     align-items: end;
     gap: 1.5rem;
   }
@@ -153,17 +142,17 @@
 }
 
 .formula-card__example {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.45rem;
-  padding: 0.65rem 0.75rem;
+  display: block;
+  max-width: 100%;
+  padding: 0.75rem 0.875rem;
   background-color: var(--bg-canvas);
   border: 1px solid var(--rule-color);
   font-size: 0.875rem;
 }
 
 .formula-card__example-label {
+  display: block;
+  margin-bottom: 0.35rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 700;
@@ -172,8 +161,15 @@
 }
 
 .formula-card__example-math {
+  display: block;
   max-width: 100%;
-  overflow-x: auto;
   color: var(--ink-primary);
   font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .formula-card__math,
+  .formula-card__example {
+    overflow-x: auto;
+  }
 }

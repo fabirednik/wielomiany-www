@@ -28,7 +28,6 @@
   padding: 0.5rem clamp(1rem, 3vw, 2rem);
   font-weight: 700;
   color: var(--ink-primary);
-  text-transform: uppercase;
   letter-spacing: -0.02em;
 }
 

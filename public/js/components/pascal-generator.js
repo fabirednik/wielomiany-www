@@ -44,28 +44,12 @@ export function createPascalGenerator(strings, options = {}) {
 
   const sectionHeader = createElement(
     'div',
-    { className: 'section-header-grid' },
-    createElement(
-      'div',
-      { className: 'section-header-grid__main' },
-      createElement('p', {
-        className: 'section-index',
-        text: `03 // ${strings.generator.eyebrow}`,
-      }),
-      createElement('h2', {
-        className: 'section-title',
-        text: strings.generator.title,
-        attrs: { id: 'generator-heading' },
-      })
-    ),
-    createElement(
-      'div',
-      { className: 'section-header-grid__aside' },
-      createElement('p', {
-        className: 'section-description',
-        text: strings.generator.description,
-      })
-    )
+    { className: 'section-header' },
+    createElement('h2', {
+      className: 'section-title',
+      text: strings.generator.title,
+      attrs: { id: 'generator-heading' },
+    })
   );
 
   const sliderId = 'pascal-exponent-slider';

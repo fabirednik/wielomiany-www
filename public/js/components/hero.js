@@ -100,7 +100,6 @@ export function createHero(strings) {
   const copyColumn = createElement(
     'div',
     { className: 'hero-copy' },
-    createElement('p', { className: 'section-index', text: `00 // ${strings.hero.eyebrow}` }),
     heading,
     createElement('div', { className: 'hero-lead-row' },
       createElement('p', { className: 'hero-subtitle', text: strings.hero.subtitle }),
