@@ -7,12 +7,12 @@
    - Lowercase file and folder paths across first-party files (`public/index.html`, `public/css/`, `public/js/`, `tests/`).
    - Valid ES6 module syntax (`node --input-type=module --check`) and verified relative import/export graphs.
    - Resolved `@import` paths in `public/css/main.css` and CSS class usage across `public/css/`.
-   - Local vendor presence (`public/vendor/tailwind.css`, `public/vendor/mathjax/tex-chtml.js`, and `.woff` fonts in `public/vendor/mathjax/output/chtml/fonts/woff-v2/`).
+   - Local vendor presence (`public/vendor/mathjax/tex-chtml.js` and `.woff` fonts in `public/vendor/mathjax/output/chtml/fonts/woff-v2/`).
    - Zero external CDN URLs and zero hardcoded Polish diacritic text outside `public/js/data/strings_pl.js`.
    - Every `STRINGS_PL` key referenced in JS exists in `public/js/data/strings_pl.js`.
 
 2. **Network, Stylesheets, Fonts & DOM Integrity**
-   - `200 OK` on `/`, `./vendor/tailwind.css`, `./vendor/mathjax/tex-chtml.js`, MathJax `.woff` fonts, and all CSS/JS modules.
+   - `200 OK` on `/`, `./css/main.css` (plus all `@import`ed CSS modules), `./vendor/mathjax/tex-chtml.js`, MathJax `.woff` fonts, and all JS modules.
    - Verified `document.styleSheets` and all CSS `@import` rules loaded non-empty rulesets.
    - `<html lang="pl">`, single `<h1>`, sequential heading levels, unique `id`s, `<video>` attributes, and contributors footer (`© 2026` + `fabirednik/wielomiany-www` repository link).
 

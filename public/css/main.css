@@ -3,7 +3,10 @@
    ========================================================================== */
 
 @import './tokens.css';
-@import './base.css';
+@import './reset.css';
+@import './accessibility.css';
+@import './layout.css';
+@import './controls.css';
 @import './components/navbar.css';
 @import './components/hero.css';
 @import './components/video-player.css';

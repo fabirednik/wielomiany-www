@@ -16,8 +16,8 @@ Follow these project standards whenever modifying components, styles, or localiz
 - **Serve Exclusively from `public/`**: All HTTP-served files live inside `public/` (`public/index.html`, `public/css/`, `public/js/`, `public/vendor/`, `public/assets/`). Repository tooling (`tests/`, `.agents/`, `README.md`, `AGENTS.md`) remains outside `public/`.
 - **All first-party filenames must be lowercase** (`kebab-case`, with `public/js/data/strings_pl.js` preserved as `strings_pl.js`).
 - **Strict Separation of Concerns**:
-  - `public/index.html`: Minimal semantic shell referencing `./vendor/tailwind.css`, `./css/main.css`, `./js/config/mathjax-config.js`, `./vendor/mathjax/tex-chtml.js`, and `./js/main.js`.
-  - `public/css/`: Entry stylesheet `public/css/main.css` imports `tokens.css`, `base.css`, `components/*.css`, and `preferences.css`. Every UI component has a matching CSS file in `public/css/components/`.
+  - `public/index.html`: Minimal semantic shell referencing `./css/main.css`, `./js/config/mathjax-config.js`, `./vendor/mathjax/tex-chtml.js`, and `./js/main.js` (zero CSS frameworks).
+  - `public/css/`: Entry stylesheet `public/css/main.css` imports `tokens.css`, `reset.css`, `accessibility.css`, `layout.css`, `controls.css`, `components/*.css`, and `preferences.css`. Every UI component has a matching CSS file in `public/css/components/`.
   - `public/js/`: Modular ES6 modules split across `config/`, `data/`, `utils/`, and `components/`.
 - **English Codebase**: All identifiers, file names, CSS classes, and comments must be written in English.
 - **No CDNs**: Never introduce remote `http://` or `https://` script/font/style imports.

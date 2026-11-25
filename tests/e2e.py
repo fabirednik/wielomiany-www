@@ -3,7 +3,7 @@
 Comprehensive Headless Chrome (Playwright) & Static Integrity E2E Suite for wielomiany-www.
 Runs against the local HTTP server (default: http://127.0.0.1:3005) and verifies:
   1. Static architecture hygiene (lowercase names, JS syntax/imports, CSS @imports, local vendor files, i18n keys, zero CDNs)
-  2. Network & stylesheet loading (200 OK for all app, CSS, JS, Tailwind, MathJax & woff2/woff fonts)
+  2. Network & stylesheet loading (200 OK for all app, CSS, JS, MathJax & woff2/woff fonts)
   3. DOM structure, metadata, heading order, unique IDs, video placeholder & reduced author footer
   4. Real MathJax LaTeX rendering across all slots, zero <mjx-merror>, zero raw delimiters
   5. Interactive Pascal generator (slider n=0..7, keyboard arrows, row/step clicks, dynamic MathJax re-typeset)
@@ -307,8 +307,17 @@ def verify_stylesheets_loaded(page, errors: list[str]) -> None:
     css_issues = page.evaluate(
         """() => {
             const issues = [];
-            if (document.styleSheets.length < 2) {
-                issues.push('Expected at least 2 top-level stylesheets (tailwind.css + main.css), got ' + document.styleSheets.length);
+            if (document.styleSheets.length < 1) {
+                issues.push('Expected at least 1 top-level stylesheet (main.css), got ' + document.styleSheets.length);
+            }
+            const mainSheet = [...document.styleSheets].find((s) => s.href && s.href.endsWith('/css/main.css'));
+            if (!mainSheet) {
+                issues.push('Missing loaded ./css/main.css stylesheet');
+            } else {
+                const importCount = [...mainSheet.cssRules].filter((r) => r.type === CSSRule.IMPORT_RULE).length;
+                if (importCount < 10) {
+                    issues.push('Expected modular CSS @imports inside main.css, found ' + importCount);
+                }
             }
             for (const sheet of document.styleSheets) {
                 if (!sheet.href) continue;

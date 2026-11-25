@@ -13,7 +13,7 @@ Built with **Vanilla ES6 JavaScript**, **HTML5**, and **modular CSS3** in a **Sw
 - **Short Multiplication Formula Matrix (`public/js/components/theory-cards.js`):** Asymmetrical 12-column wireframe matrix presenting all 7 degree-2 and degree-3 identities rendered via MathJax, with descriptions, worked examples, and one-click LaTeX clipboard copy.
 - **Interactive Pascal's Triangle Generator (`public/js/components/pascal-generator.js`):** Pure JS binomial coefficient engine (`public/js/utils/pascal-math.js`) supporting exponents `n = 0..7` via native range slider, keyboard arrows, step buttons, or clickable Pascal's Triangle rows, dynamically re-typesetting LaTeX via queued MathJax updates (`public/js/utils/mathjax.js`).
 - **Centralized Polish Localization (`public/js/data/strings_pl.js`):** All Polish UI copy, formulas, examples, and ARIA labels are isolated in a single dictionary module.
-- **Local Offline Dependencies (`public/vendor/`):** Bundled local MathJax v3 (`tex-chtml.js` + `woff-v2` fonts), `Space Grotesk` (`latin` & `latin-ext` `.woff2` fonts), and compiled `tailwind.css` — zero CDN requests.
+- **Local Offline Dependencies (`public/vendor/`):** Bundled local MathJax v3 (`tex-chtml.js` + `woff-v2` fonts) and `Space Grotesk` (`latin` & `latin-ext` `.woff2` fonts) — zero frameworks and zero CDN requests.
 
 ---
 
@@ -36,7 +36,10 @@ wielomiany-www/
     ├── css/
     │   ├── main.css                  # Stylesheet entry point (@import cascade)
     │   ├── tokens.css                # @font-face & CSS custom properties
-    │   ├── base.css                  # Reset, wireframe grid, accessibility & buttons
+    │   ├── reset.css                 # Document reset & element normalization
+    │   ├── accessibility.css         # Focus outlines, skip-link & SR utilities
+    │   ├── layout.css                # Wireframe shell & section header framing
+    │   ├── controls.css              # Shared sharp-edged button & copy styles
     │   ├── preferences.css           # Coarse-pointer & prefers-reduced-motion overrides
     │   └── components/               # 1:1 component stylesheets
     │       ├── footer.css
@@ -64,7 +67,6 @@ wielomiany-www/
     │       ├── theory-cards.js
     │       └── video-player.js
     └── vendor/                       # Locally hosted libraries & fonts (no CDNs)
-        ├── tailwind.css
         ├── fonts/space-grotesk/
         └── mathjax/
 ```
@@ -116,7 +118,7 @@ The video player component (`public/js/components/video-player.js`) automaticall
 The repository includes a 7-stage Playwright Headless Chrome E2E suite in [`tests/e2e.py`](tests/e2e.py) covering:
 
 1. `public/` isolation, lowercase filenames, ES6 module syntax/import graph, CSS `@import` resolution, `strings_pl.js` key coverage, and zero-CDN hygiene.
-2. HTTP `200` verification for HTML, CSS, JS, local Tailwind, local MathJax, and `.woff` / `.woff2` fonts.
+2. HTTP `200` verification for HTML, CSS, JS, local MathJax, and `.woff` / `.woff2` fonts.
 3. Real MathJax `<mjx-container>` rendering across all 17 formula containers with zero `<mjx-merror>` or leaked delimiters.
 4. Interactive Pascal's Triangle generator checks across `n = 0..7` (slider input, keyboard arrows, row clicks, step buttons).
 5. Clipboard copy behavior, `aria-live` announcements, and timer reset.

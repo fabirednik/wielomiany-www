@@ -1,0 +1,37 @@
+/* ==========================================================================
+   Keyboard Focus, Skip-Link & Screen-Reader Visibility Utilities
+   ========================================================================== */
+
+/* Stark brutalist focus ring */
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 3px solid var(--accent-signal);
+  outline-offset: 2px;
+}
+
+/* Visually hidden helper while keeping focusable skip-links reachable */
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.skip-link:focus-visible {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--bg-inverted);
+  color: var(--ink-inverse);
+  border: 1px solid var(--rule-color);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
