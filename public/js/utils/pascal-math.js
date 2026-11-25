@@ -103,13 +103,16 @@ export function formatBinomialTerm(coefficient, powerA, powerB) {
 }
 
 /**
- * Builds the full LaTeX expansion equation for (a + b)^n.
+ * Builds the full LaTeX expansion equation for (a + b)^n or (a - b)^n
+ * (obtained via the substitution (a + (-b))^n, alternating signs on odd powers of b).
  *
  * @param {number} exponent
+ * @param {'+' | '-'} [sign='+']
  * @returns {string}
  */
-export function buildBinomialExpansionLatex(exponent) {
+export function buildBinomialExpansionLatex(exponent, sign = '+') {
   const n = clampExponent(exponent);
+  const isDifference = sign === '-';
   const coefficients = getPascalRow(n);
 
   const terms = coefficients.map((coefficient, index) => {
@@ -118,7 +121,16 @@ export function buildBinomialExpansionLatex(exponent) {
     return formatBinomialTerm(coefficient, powerA, powerB);
   });
 
-  return `(a + b)^{${n}} = ${terms.join(' + ')}`;
+  const rhs = terms.reduce((expression, term, index) => {
+    if (index === 0) {
+      return term;
+    }
+    const operator = isDifference && index % 2 === 1 ? ' - ' : ' + ';
+    return `${expression}${operator}${term}`;
+  }, '');
+
+  const lhsSign = isDifference ? '-' : '+';
+  return `(a ${lhsSign} b)^{${n}} = ${rhs}`;
 }
 
 /**

@@ -52,6 +52,17 @@ EXPECTED_LATEX_BY_EXPONENT = {
     7: "(a + b)^{7} = a^{7} + 7a^{6}b + 21a^{5}b^{2} + 35a^{4}b^{3} + 35a^{3}b^{4} + 21a^{2}b^{5} + 7ab^{6} + b^{7}",
 }
 
+EXPECTED_DIFF_LATEX_BY_EXPONENT = {
+    0: "(a - b)^{0} = 1",
+    1: "(a - b)^{1} = a - b",
+    2: "(a - b)^{2} = a^{2} - 2ab + b^{2}",
+    3: "(a - b)^{3} = a^{3} - 3a^{2}b + 3ab^{2} - b^{3}",
+    4: "(a - b)^{4} = a^{4} - 4a^{3}b + 6a^{2}b^{2} - 4ab^{3} + b^{4}",
+    5: "(a - b)^{5} = a^{5} - 5a^{4}b + 10a^{3}b^{2} - 10a^{2}b^{3} + 5ab^{4} - b^{5}",
+    6: "(a - b)^{6} = a^{6} - 6a^{5}b + 15a^{4}b^{2} - 20a^{3}b^{3} + 15a^{2}b^{4} - 6ab^{5} + b^{6}",
+    7: "(a - b)^{7} = a^{7} - 7a^{6}b + 21a^{5}b^{2} - 35a^{4}b^{3} + 35a^{3}b^{4} - 21a^{2}b^{5} + 7ab^{6} - b^{7}",
+}
+
 EXPECTED_PASCAL_ROWS = {
     0: "[1]",
     1: "[1, 1]",
@@ -397,8 +408,8 @@ def verify_mathjax_rendering(page, errors: list[str]) -> None:
             const mathContainers = [
                 ...document.querySelectorAll('.hero-preview-card__formula, .formula-card__math, .formula-card__example-math, .generator-output__math')
             ];
-            if (mathContainers.length !== 16) {
-                issues.push('Expected 16 math containers across Hero/Theory/Generator, found ' + mathContainers.length);
+            if (mathContainers.length !== 17) {
+                issues.push('Expected 17 math containers across Hero/Theory/Generator, found ' + mathContainers.length);
             }
 
             for (const container of mathContainers) {
@@ -728,10 +739,15 @@ def run() -> int:
                 if len(set(card_bgs)) != 1:
                     errors.append(f"Expected identical background across all 7 formula cards, got {card_bgs}")
 
-                # Verify generator copy button starts with "Kopiuj LaTeX"
-                gen_copy_label = (page.locator(".generator-output .copy-btn").text_content() or "").strip()
-                if gen_copy_label != "Kopiuj LaTeX":
-                    errors.append(f"Expected generator copy button label 'Kopiuj LaTeX', got {gen_copy_label!r}")
+                # Verify generator copy buttons start with "Kopiuj LaTeX"
+                for kind in ("sum", "difference"):
+                    gen_copy_label = (
+                        page.locator(f".generator-output[data-output-kind='{kind}'] .copy-btn").text_content() or ""
+                    ).strip()
+                    if gen_copy_label != "Kopiuj LaTeX":
+                        errors.append(
+                            f"Expected generator {kind} copy button label 'Kopiuj LaTeX', got {gen_copy_label!r}"
+                        )
 
                 # Verify ONLY Theory and Generator section headers sit on orange background (#FF5500)
                 orange_title_issues = page.evaluate(
@@ -834,9 +850,11 @@ def run() -> int:
                 print("  [4/7] Verifying Pascal generator (n = 0..7), keyboard & MathJax updates...")
                 slider = page.locator("#pascal-exponent-slider")
                 badge = page.locator(".exponent-badge")
-                copy_btn = page.locator(".generator-output .copy-btn")
+                sum_copy_btn = page.locator(".generator-output[data-output-kind='sum'] .copy-btn")
+                diff_copy_btn = page.locator(".generator-output[data-output-kind='difference'] .copy-btn")
                 active_row_stat = page.locator(".generator-stat__value--mono")
-                output_math = page.locator(".generator-output__math")
+                sum_output_math = page.locator(".generator-output__math[data-formula-kind='sum']")
+                diff_output_math = page.locator(".generator-output__math[data-formula-kind='difference']")
 
                 if badge.inner_text().strip() != "n = 3":
                     errors.append(f"Expected initial badge 'n = 3', got {badge.inner_text()!r}")
@@ -846,13 +864,22 @@ def run() -> int:
                     slider.dispatch_event("input")
                     page.wait_for_timeout(40)
 
-                    copy_btn.click()
-                    page.locator(".generator-output .copy-btn[data-copied='true']").wait_for(timeout=2000)
-                    expected_latex = EXPECTED_LATEX_BY_EXPONENT[n]
-                    actual_latex = page.evaluate("() => navigator.clipboard.readText()")
-                    if actual_latex != expected_latex:
+                    sum_copy_btn.click()
+                    page.locator(".generator-output[data-output-kind='sum'] .copy-btn[data-copied='true']").wait_for(timeout=2000)
+                    expected_sum = EXPECTED_LATEX_BY_EXPONENT[n]
+                    actual_sum = page.evaluate("() => navigator.clipboard.readText()")
+                    if actual_sum != expected_sum:
                         errors.append(
-                            f"Slider n={n}: expected LaTeX {expected_latex!r}, got {actual_latex!r}"
+                            f"Slider n={n} sum: expected LaTeX {expected_sum!r}, got {actual_sum!r}"
+                        )
+
+                    diff_copy_btn.click()
+                    page.locator(".generator-output[data-output-kind='difference'] .copy-btn[data-copied='true']").wait_for(timeout=2000)
+                    expected_diff = EXPECTED_DIFF_LATEX_BY_EXPONENT[n]
+                    actual_diff = page.evaluate("() => navigator.clipboard.readText()")
+                    if actual_diff != expected_diff:
+                        errors.append(
+                            f"Slider n={n} diff: expected LaTeX {expected_diff!r}, got {actual_diff!r}"
                         )
 
                     actual_row = active_row_stat.inner_text().strip()
@@ -874,10 +901,11 @@ def run() -> int:
                     if pressed_row != "true" or pressed_step != "true":
                         errors.append(f"n={n}: aria-pressed mismatch row={pressed_row}, step={pressed_step}")
 
-                    mjx_count_in_output = output_math.locator("mjx-container").count()
-                    if mjx_count_in_output != 1:
+                    sum_mjx_count = sum_output_math.locator("mjx-container").count()
+                    diff_mjx_count = diff_output_math.locator("mjx-container").count()
+                    if sum_mjx_count != 1 or diff_mjx_count != 1:
                         errors.append(
-                            f"Slider n={n}: expected exactly 1 <mjx-container> in output, found {mjx_count_in_output}"
+                            f"Slider n={n}: expected 1 <mjx-container> per output, found sum={sum_mjx_count}, diff={diff_mjx_count}"
                         )
 
                 # Keyboard interaction check on slider
@@ -898,24 +926,32 @@ def run() -> int:
                 if slider.input_value() != "2":
                     errors.append(f"Clicking step button 2 failed to sync slider (value={slider.input_value()!r})")
 
-                output_math.locator("mjx-container").wait_for(timeout=3000)
+                sum_output_math.locator("mjx-container").wait_for(timeout=3000)
+                diff_output_math.locator("mjx-container").wait_for(timeout=3000)
                 if page.locator("mjx-merror").count() > 0:
                     errors.append("MathJax parse errors (<mjx-merror>) detected after dynamic updates")
 
                 print("  [5/7] Verifying clipboard copy, live announcement & reset timer...")
-                copy_btn = page.locator(".generator-output .copy-btn")
-                copy_btn.click()
-                page.locator(".generator-output .copy-btn[data-copied='true']").wait_for(timeout=2000)
+                sum_copy_btn.click()
+                page.locator(".generator-output[data-output-kind='sum'] .copy-btn[data-copied='true']").wait_for(timeout=2000)
                 copied_text = page.evaluate("() => navigator.clipboard.readText()")
                 if copied_text != EXPECTED_LATEX_BY_EXPONENT[2]:
                     errors.append(
                         f"Clipboard text mismatch: expected {EXPECTED_LATEX_BY_EXPONENT[2]!r}, got {copied_text!r}"
                     )
-                if (copy_btn.text_content() or "").strip() != "Skopiowano":
-                    errors.append(f"Expected copied label 'Skopiowano', got {copy_btn.text_content()!r}")
-                live_status = page.locator(".generator-output [role='status']").inner_text().strip()
+                if (sum_copy_btn.text_content() or "").strip() != "Skopiowano":
+                    errors.append(f"Expected copied label 'Skopiowano', got {sum_copy_btn.text_content()!r}")
+                live_status = page.locator(".generator-outputs [role='status']").inner_text().strip()
                 if not live_status:
                     errors.append("Expected non-empty aria-live status announcement after copy")
+
+                diff_copy_btn.click()
+                page.locator(".generator-output[data-output-kind='difference'] .copy-btn[data-copied='true']").wait_for(timeout=2000)
+                diff_copied = page.evaluate("() => navigator.clipboard.readText()")
+                if diff_copied != EXPECTED_DIFF_LATEX_BY_EXPONENT[2]:
+                    errors.append(
+                        f"Difference clipboard mismatch: expected {EXPECTED_DIFF_LATEX_BY_EXPONENT[2]!r}, got {diff_copied!r}"
+                    )
 
                 theory_copy_btn = page.locator("#theory-section .formula-card .copy-btn").first
                 theory_copy_btn.click()
@@ -924,9 +960,9 @@ def run() -> int:
                 if theory_copied != "(a + b)^2 = a^2 + 2ab + b^2":
                     errors.append(f"Unexpected theory formula copied to clipboard: {theory_copied!r}")
 
-                # Verify copy button resets cleanly after ~1.8s
+                # Verify copy buttons reset cleanly after ~1.8s
                 page.wait_for_timeout(1950)
-                if copy_btn.get_attribute("data-copied") is not None:
+                if sum_copy_btn.get_attribute("data-copied") is not None or diff_copy_btn.get_attribute("data-copied") is not None:
                     errors.append("Copy button did not reset data-copied state after timeout")
 
                 print("  [6/7] Verifying keyboard skip-link, accessible names & target sizes...")
@@ -936,6 +972,15 @@ def run() -> int:
                 page.locator(".pascal-row[data-row-index='7']").click()
                 page.wait_for_timeout(120)
                 verify_mathjax_rendering(page, errors)
+                page.set_viewport_size({"width": 1280, "height": 800})
+                page.wait_for_timeout(60)
+                n7_desktop_overflow = page.evaluate(
+                    """() => [...document.querySelectorAll('.generator-output__math')]
+                        .filter(el => el.scrollWidth > el.clientWidth + 1)
+                        .map(el => el.dataset.formulaKind + ': ' + el.scrollWidth + ' > ' + el.clientWidth)"""
+                )
+                for item in n7_desktop_overflow:
+                    errors.append(f"Desktop n=7 formula overflow on {item}")
                 for vp_name, vp_w, vp_h in VIEWPORTS:
                     check_viewport_overflow(page, vp_name, vp_w, vp_h, errors)
 

@@ -32,7 +32,77 @@ function syncSliderState(slider, progressBar) {
 }
 
 /**
- * Renders the interactive Pascal's Triangle and (a + b)^n LaTeX formula generator.
+ * Creates a reusable formula output panel with a header, MathJax container, and copy button.
+ *
+ * @param {object} config
+ * @param {string} config.kind
+ * @param {string} config.headingText
+ * @param {() => string} config.getLatex
+ * @param {HTMLElement} config.liveRegion
+ * @param {import('../data/strings_pl.js').STRINGS_PL} config.strings
+ * @returns {{ panel: HTMLElement, mathContainer: HTMLElement }}
+ */
+function createOutputPanel({ kind, headingText, getLatex, liveRegion, strings }) {
+  const formulaDisplay = createElement('div', {
+    className: 'generator-output__math',
+    attrs: { 'aria-live': 'polite' },
+    dataset: { formulaKind: kind },
+  });
+
+  const copyIcon = createDecorativeSvg(
+    [
+      'M9 9h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z',
+      'M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1',
+    ],
+    { className: 'copy-btn__icon' }
+  );
+
+  const copyLatexButton = createElement(
+    'button',
+    {
+      className: 'copy-btn',
+      attrs: {
+        type: 'button',
+        'aria-label': `${strings.generator.copyLatexLabel}: ${headingText}`,
+      },
+    },
+    copyIcon,
+    createElement('span', {
+      text: strings.generator.copyLatexLabel,
+      dataset: { copyLabel: 'true' },
+    })
+  );
+
+  bindCopyButton(copyLatexButton, getLatex, {
+    defaultLabel: strings.generator.copyLatexLabel,
+    copiedLabel: strings.generator.copiedLatexLabel,
+    liveRegion,
+    announcementSuccess: strings.accessibility.copyAnnouncementSuccess,
+    announcementError: strings.accessibility.copyAnnouncementError,
+  });
+
+  const outputHeader = createElement(
+    'div',
+    { className: 'generator-output__header' },
+    createElement('h3', {
+      className: 'generator-output__title',
+      text: headingText,
+    }),
+    copyLatexButton
+  );
+
+  const panel = createElement(
+    'div',
+    { className: 'generator-output', dataset: { outputKind: kind } },
+    outputHeader,
+    formulaDisplay
+  );
+
+  return { panel, mathContainer: formulaDisplay };
+}
+
+/**
+ * Renders the interactive Pascal's Triangle and (a + b)^n / (a - b)^n LaTeX formula generator.
  *
  * @param {import('../data/strings_pl.js').STRINGS_PL} strings
  * @param {{ initialExponent?: number }} [options]
@@ -40,7 +110,8 @@ function syncSliderState(slider, progressBar) {
  */
 export function createPascalGenerator(strings, options = {}) {
   let currentExponent = clampExponent(options.initialExponent ?? DEFAULT_EXPONENT);
-  let currentLatex = buildBinomialExpansionLatex(currentExponent);
+  let currentSumLatex = buildBinomialExpansionLatex(currentExponent, '+');
+  let currentDifferenceLatex = buildBinomialExpansionLatex(currentExponent, '-');
 
   const sectionHeader = createElement(
     'div',
@@ -226,69 +297,30 @@ export function createPascalGenerator(strings, options = {}) {
     createElement('div', { className: 'pascal-pyramid' }, ...rowButtons)
   );
 
-  const formulaDisplay = createElement('div', {
-    className: 'generator-output__math',
-    attrs: { 'aria-live': 'polite' },
-  });
-
   const copyLiveRegion = createElement('span', {
     className: 'visually-hidden',
     attrs: { 'aria-live': 'polite', role: 'status' },
   });
 
-  const copyIcon = createDecorativeSvg(
-    [
-      'M9 9h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2Z',
-      'M5 15H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1',
-    ],
-    { className: 'copy-btn__icon' }
-  );
-
-  const copyLatexButton = createElement(
-    'button',
-    {
-      className: 'copy-btn',
-      attrs: {
-        type: 'button',
-        'aria-label': strings.generator.copyLatexLabel,
-      },
-    },
-    copyIcon,
-    createElement('span', {
-      text: strings.generator.copyLatexLabel,
-      dataset: { copyLabel: 'true' },
-    })
-  );
-
-  bindCopyButton(copyLatexButton, () => currentLatex, {
-    defaultLabel: strings.generator.copyLatexLabel,
-    copiedLabel: strings.generator.copiedLatexLabel,
+  const sumOutput = createOutputPanel({
+    kind: 'sum',
+    headingText: strings.generator.formulaHeading,
+    getLatex: () => currentSumLatex,
     liveRegion: copyLiveRegion,
-    announcementSuccess: strings.accessibility.copyAnnouncementSuccess,
-    announcementError: strings.accessibility.copyAnnouncementError,
+    strings,
   });
 
-  const outputHeader = createElement(
-    'div',
-    { className: 'generator-output__header' },
-    createElement('h3', {
-      className: 'generator-output__title',
-      text: strings.generator.formulaHeading,
-    }),
-    copyLatexButton
-  );
-
-  const outputPanel = createElement(
-    'div',
-    { className: 'generator-output' },
-    outputHeader,
-    formulaDisplay,
-    copyLiveRegion
-  );
+  const differenceOutput = createOutputPanel({
+    kind: 'difference',
+    headingText: strings.generator.differenceFormulaHeading,
+    getLatex: () => currentDifferenceLatex,
+    liveRegion: copyLiveRegion,
+    strings,
+  });
 
   /**
    * Synchronizes all interactive controls, Pascal's Triangle highlights,
-   * and generated LaTeX output for a given exponent n.
+   * and generated LaTeX outputs for (a + b)^n and (a - b)^n.
    *
    * @param {number} nextExponent
    * @param {{ shouldTypeset?: boolean }} [updateOptions]
@@ -324,11 +356,13 @@ export function createPascalGenerator(strings, options = {}) {
       rowButton.setAttribute('aria-pressed', String(isSelected));
     }
 
-    currentLatex = buildBinomialExpansionLatex(n);
-    formulaDisplay.textContent = `\\[${currentLatex}\\]`;
+    currentSumLatex = buildBinomialExpansionLatex(n, '+');
+    currentDifferenceLatex = buildBinomialExpansionLatex(n, '-');
+    sumOutput.mathContainer.textContent = `\\[${currentSumLatex}\\]`;
+    differenceOutput.mathContainer.textContent = `\\[${currentDifferenceLatex}\\]`;
 
     if (shouldTypeset) {
-      typesetMath(formulaDisplay);
+      typesetMath([sumOutput.mathContainer, differenceOutput.mathContainer]);
     }
   }
 
@@ -338,18 +372,26 @@ export function createPascalGenerator(strings, options = {}) {
 
   setExponent(currentExponent, { shouldTypeset: false });
 
-  const rightWorkspace = createElement(
+  const topWorkspace = createElement(
     'div',
-    { className: 'generator-workspace' },
-    trianglePanel,
-    outputPanel
+    { className: 'generator-top' },
+    controlsPanel,
+    trianglePanel
+  );
+
+  const outputsRow = createElement(
+    'div',
+    { className: 'generator-outputs' },
+    sumOutput.panel,
+    differenceOutput.panel,
+    copyLiveRegion
   );
 
   const studioCard = createElement(
     'div',
     { className: 'generator-studio' },
-    controlsPanel,
-    rightWorkspace
+    topWorkspace,
+    outputsRow
   );
 
   return createElement(

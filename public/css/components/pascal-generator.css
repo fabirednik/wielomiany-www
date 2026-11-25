@@ -6,13 +6,20 @@
   container-type: inline-size;
   min-width: 0;
   max-width: 100%;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
   background-color: var(--bg-canvas);
 }
 
+.generator-top {
+  min-width: 0;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
 @media (min-width: 960px) {
-  .generator-studio {
+  .generator-top {
     grid-template-columns: minmax(0, 35fr) minmax(0, 65fr);
   }
 }
@@ -236,20 +243,12 @@
   overflow-wrap: anywhere;
 }
 
-/* Right Workspace: Pascal's Triangle Matrix + Formula Output */
-.generator-workspace {
-  min-width: 0;
-  max-width: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
+/* Right Top Workspace: Pascal's Triangle Matrix */
 .pascal-panel {
   min-width: 0;
   max-width: 100%;
   padding: clamp(1.25rem, 3vw, 2.25rem);
   background-color: var(--bg-canvas);
-  border-bottom: 1px solid var(--rule-color);
 }
 
 .pascal-panel__header {
@@ -375,17 +374,45 @@
   color: var(--accent-signal-ink);
 }
 
-/* Generated Formula Output Box */
+/* Side-by-Side Formula Output Row ((a + b)^n and (a - b)^n) */
+.generator-outputs {
+  min-width: 0;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--rule-color);
+}
+
+@media (min-width: 960px) {
+  .generator-outputs {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
 .generator-output {
   min-width: 0;
   max-width: 100%;
-  padding: clamp(1.25rem, 3vw, 2.25rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
   background-color: var(--bg-contrast);
-  flex: 1 0 auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   gap: 1rem;
+  border-bottom: 1px solid var(--rule-color);
+}
+
+.generator-output[data-output-kind='difference'] {
+  border-bottom: 0;
+}
+
+@media (min-width: 960px) {
+  .generator-output {
+    border-bottom: 0;
+  }
+
+  .generator-output[data-output-kind='sum'] {
+    border-right: 1px solid var(--rule-color);
+  }
 }
 
 .generator-output__header {
@@ -406,10 +433,10 @@
 
 .generator-output__math {
   max-width: 100%;
-  padding: 1.75rem 1rem;
+  padding: 1.35rem 0.75rem;
   background-color: var(--bg-surface);
   border: 1px solid var(--rule-color);
-  font-size: clamp(1rem, 1.8vw, 1.3rem);
+  font-size: clamp(0.9rem, 1.18vw, 1.1rem);
   overflow-x: auto;
   overflow-wrap: anywhere;
   text-align: left;

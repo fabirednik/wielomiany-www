@@ -135,6 +135,7 @@ export const STRINGS_PL = Object.freeze({
     triangleHint: 'Kliknij wiersz, aby wybrać odpowiedni wykładnik potęgi.',
     rowAriaPrefix: 'Wybierz wiersz trójkąta Pascala dla n =',
     formulaHeading: 'Wygenerowany wzór rozwinięty',
+    differenceFormulaHeading: 'Wzór dla różnicy: (a - b)ⁿ = (a + (-b))ⁿ',
     copyLatexLabel: 'Kopiuj LaTeX',
     copiedLatexLabel: 'Skopiowano',
   },

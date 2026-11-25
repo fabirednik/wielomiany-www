@@ -17,11 +17,11 @@
    - `<html lang="pl">`, single `<h1>`, sequential heading levels, unique `id`s, `<video>` attributes, and contributors footer (`© 2026` + `fabirednik/wielomiany-www` repository link).
 
 3. **Real MathJax Rendering Audit**
-   - All 16 math containers across Hero, Theory Cards, and Pascal Generator render non-zero `<mjx-container>` nodes.
+   - All 17 math containers across Hero, Theory Cards, and Pascal Generator (`(a + b)^n` and `(a - b)^n`) render non-zero `<mjx-container>` nodes.
    - Zero `<mjx-merror>` nodes and zero unrendered LaTeX delimiters (`\(`, `\)`, `\[`, `\]`, `$$`) outside `<code>`.
 
 4. **Interactive Pascal's Triangle Generator (`n = 0..7`)**
-   - Sweeps slider across `n = 0..7`, asserting exact LaTeX, coefficient arrays, `--control-value`, `aria-pressed`, and exactly `1` `<mjx-container>` in `.generator-output__math`.
+   - Sweeps slider across `n = 0..7`, asserting exact LaTeX for both `(a + b)^n` and `(a - b)^n`, coefficient arrays, `--control-value`, `aria-pressed`, and exactly `1` `<mjx-container>` per output box.
    - Verifies keyboard `ArrowLeft`/`ArrowRight`, row clicks, and step button clicks.
 
 5. **Clipboard Copy & Reset Lifecycle**
