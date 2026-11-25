@@ -181,6 +181,11 @@ button {
   color: var(--accent-signal-ink);
 }
 
+.btn--primary:focus-visible,
+.copy-btn[data-copied='true']:focus-visible {
+  outline-color: var(--ink-primary);
+}
+
 .btn--primary:hover {
   background-color: var(--bg-inverted);
   color: var(--ink-inverse);

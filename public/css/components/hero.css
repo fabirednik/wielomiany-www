@@ -112,9 +112,15 @@
 
 .hero-preview-card__formula {
   max-width: 100%;
-  overflow-x: auto;
   font-size: 0.9375rem;
   color: var(--ink-primary);
+}
+
+@media (max-width: 767px) {
+  .hero-preview-card__formula {
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+  }
 }
 
 .geo-square {

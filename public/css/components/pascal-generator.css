@@ -3,7 +3,6 @@
    ========================================================================== */
 
 .generator-studio {
-  container-type: inline-size;
   min-width: 0;
   max-width: 100%;
   display: flex;
@@ -150,6 +149,10 @@
   background-color: var(--bg-inverted);
 }
 
+.range-slider:hover::-moz-range-thumb {
+  background-color: var(--accent-signal);
+}
+
 .slider-scale-hints {
   display: flex;
   justify-content: space-between;
@@ -199,6 +202,10 @@
 .exponent-step-btn.is-active {
   background-color: var(--accent-signal);
   color: var(--accent-signal-ink);
+}
+
+.exponent-step-btn.is-active:focus-visible {
+  outline-color: var(--ink-primary);
 }
 
 .generator-stats {

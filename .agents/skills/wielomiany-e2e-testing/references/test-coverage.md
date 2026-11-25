@@ -21,7 +21,7 @@
    - Zero `<mjx-merror>` nodes and zero unrendered LaTeX delimiters (`\(`, `\)`, `\[`, `\]`, `$$`) outside `<code>`.
 
 4. **Interactive Pascal's Triangle Generator (`n = 0..7`)**
-   - Sweeps slider across `n = 0..7`, asserting exact LaTeX for both `(a + b)^n` and `(a - b)^n`, coefficient arrays, `--control-value`, `aria-pressed`, and exactly `1` `<mjx-container>` per output box.
+   - Sweeps slider across `n = 0..7`, asserting exact LaTeX for both `(a + b)^n` and `(a - b)^n`, coefficient arrays, `.slider-track__fill` width percentage, `aria-pressed`, and exactly `1` `<mjx-container>` per output box.
    - Verifies keyboard `ArrowLeft`/`ArrowRight`, row clicks, and step button clicks.
 
 5. **Clipboard Copy & Reset Lifecycle**
@@ -32,4 +32,4 @@
    - Every button, link, and input has an accessible name and satisfies minimum `24×24` CSS px hit targets.
 
 7. **Responsive Mobile-to-Desktop Bounds & Anti-Clipping**
-   - Selects `n = 7` and checks `320x568`, `375x667`, `390x844`, `414x896`, `768x1024`, and `1280x800` for zero horizontal page overflow, zero left-edge clipping inside math/pyramid scrollers, non-overlapping nav links, and valid `.geo-square` cell dimensions.
+   - Selects `n = 7` and checks `320x568`, `375x667`, `390x844`, `414x896`, `768x1024`, `1280x800`, and `1600x900` for zero horizontal page overflow, zero left-edge clipping inside math/pyramid scrollers, non-overlapping nav links, and valid `.geo-square` cell dimensions.

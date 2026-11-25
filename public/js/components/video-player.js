@@ -36,7 +36,6 @@ export function createVideoPlayer(strings) {
       className: 'video-frame__media',
       attrs: {
         controls: true,
-        loading: 'lazy',
         preload: 'metadata',
         width: 1280,
         height: 720,

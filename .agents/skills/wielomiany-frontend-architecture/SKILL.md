@@ -29,7 +29,7 @@ Follow these project standards whenever modifying components, styles, or localiz
 
 ## 3. Brutalist Design & Mobile Overflow Prevention Rules
 
-- Preserve the flat Neo-Brutalist / Swiss editorial design (`border-radius: 0`, `box-shadow: none`, zero CSS gradients, zero `backdrop-filter`, `#E8E7E2` / `#F4F3EE` / `#111111` + `#FF2400` signal accent).
+- Preserve the flat Neo-Brutalist / Swiss editorial design (`border-radius: 0`, `box-shadow: none`, zero CSS gradients, zero `backdrop-filter`, `#E8E7E2` / `#F4F3EE` / `#111111` + `#FF5500` signal accent).
 - Use `grid-template-columns: minmax(0, 1fr)` (never bare `1fr`) on single-column responsive grids.
 - Apply `min-width: 0; max-width: 100%;` on grid/flex children (`.hero-copy`, `.hero-preview-card`, `.formula-card`, `.generator-controls`, `.pascal-panel`, `.generator-output`).
 - Wrap headers on narrow screens (`flex-wrap: wrap`) and contain wide math/Pascal rows inside local horizontal scrollers (`overflow-x: auto`) rather than expanding the page width.

@@ -117,11 +117,11 @@ The repository includes a 7-stage Playwright Headless Chrome E2E suite in [`test
 
 1. `public/` isolation, lowercase filenames, ES6 module syntax/import graph, CSS `@import` resolution, `strings_pl.js` key coverage, and zero-CDN hygiene.
 2. HTTP `200` verification for HTML, CSS, JS, local Tailwind, local MathJax, and `.woff` / `.woff2` fonts.
-3. Real MathJax `<mjx-container>` rendering across all 16 formula containers with zero `<mjx-merror>` or leaked delimiters.
+3. Real MathJax `<mjx-container>` rendering across all 17 formula containers with zero `<mjx-merror>` or leaked delimiters.
 4. Interactive Pascal's Triangle generator checks across `n = 0..7` (slider input, keyboard arrows, row clicks, step buttons).
 5. Clipboard copy behavior, `aria-live` announcements, and timer reset.
 6. Keyboard accessibility (`Tab` skip-link visibility, accessible names, `>= 24×24px` hit targets) and brutalist visual invariants (`border-radius: 0`, `box-shadow: none`, zero CSS gradients/blur).
-7. Zero horizontal overflow and zero left-edge scroll clipping across `320×568`, `375×667`, `390×844`, `414×896`, `768×1024`, and `1280×800` viewports with `n = 7` active.
+7. Zero horizontal overflow and zero left-edge scroll clipping across `320×568`, `375×667`, `390×844`, `414×896`, `768×1024`, `1280×800`, and `1600×900` viewports with `n = 7` active.
 
 ### Run the suite
 

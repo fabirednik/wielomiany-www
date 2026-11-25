@@ -14,7 +14,7 @@ import {
 const DEFAULT_EXPONENT = 3;
 
 /**
- * Syncs CSS custom properties and progress bar fill width for the active range slider.
+ * Syncs progress bar fill width for the active range slider.
  *
  * @param {HTMLInputElement} slider
  * @param {HTMLElement} progressBar
@@ -25,9 +25,6 @@ function syncSliderState(slider, progressBar) {
   const value = Number(slider.value);
   const percent = max > min ? ((value - min) / (max - min)) * 100 : 0;
 
-  slider.style.setProperty('--attr-min', String(min));
-  slider.style.setProperty('--attr-max', String(max));
-  slider.style.setProperty('--control-value', String(value));
   progressBar.style.width = `${percent}%`;
 }
 
@@ -45,7 +42,6 @@ function syncSliderState(slider, progressBar) {
 function createOutputPanel({ kind, headingText, getLatex, liveRegion, strings }) {
   const formulaDisplay = createElement('div', {
     className: 'generator-output__math',
-    attrs: { 'aria-live': 'polite' },
     dataset: { formulaKind: kind },
   });
 

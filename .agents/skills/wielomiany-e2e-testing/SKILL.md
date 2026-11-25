@@ -31,6 +31,6 @@ python3 tests/e2e.py
 
 1. **Zero Failures Allowed**: `python3 tests/e2e.py` MUST exit with status `0` and print `ALL E2E CHECKS PASSED CLEANLY`.
 2. **Real MathJax & Local Vendor Integrity**: Every formula container must render a non-zero `<mjx-container>` with local `.woff` fonts loaded (`200 OK`), zero `<mjx-merror>` elements, and zero leaked LaTeX delimiters.
-3. **Zero Horizontal Overflow & Zero Clipping**: Every viewport (`320px`, `375px`, `390px`, `414px`, `768px`, `1280px`) must maintain `document.documentElement.scrollWidth <= window.innerWidth` and unclipped left edges inside horizontal scroll containers even when `n = 7` is selected.
+3. **Zero Horizontal Overflow & Zero Clipping**: Every viewport (`320px`, `375px`, `390px`, `414px`, `768px`, `1280px`, `1600px`) must maintain `document.documentElement.scrollWidth <= window.innerWidth` and unclipped left edges inside horizontal scroll containers even when `n = 7` is selected.
 4. **Interactive & Accessibility Verification**: Every UI change must keep the slider (`n = 0..7`), keyboard arrows, Pascal row clicks, step buttons, copy-to-clipboard actions, skip-link focus, and `>= 24x24px` target sizes passing with zero uncaught `pageerror` exceptions.
 5. **Update Tests with New Features**: Whenever a new UI section, interactive control, or CSS breakpoint is added, extend `tests/e2e.py` with matching Playwright assertions in the same change.

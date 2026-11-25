@@ -5,7 +5,6 @@ import { createDecorativeSvg, createElement } from '../utils/dom.js';
  * Builds an individual semantic <article> cell inside the asymmetrical brutalist formula matrix.
  *
  * @param {object} formula
- * @param {number} index
  * @param {import('../data/strings_pl.js').STRINGS_PL} strings
  * @param {HTMLElement} liveRegion
  * @returns {HTMLElement}

@@ -286,7 +286,9 @@ for (const file of jsFiles) {
   for (const m of src.matchAll(/className:\\s*['"`]([^'"`]+)['"`]/g)) {
     for (const cls of m[1].split(/\\s+/)) {
       if (!cls || cls.includes('$')) continue;
-      assert.ok(combinedCss.includes('.' + cls), 'Missing CSS class .' + cls + ' used in ' + file);
+      const escaped = cls.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&');
+      const selectorRe = new RegExp('\\\\.' + escaped + '(?![A-Za-z0-9_-])');
+      assert.ok(selectorRe.test(combinedCss), 'Missing CSS class .' + cls + ' used in ' + file);
     }
   }
 }
@@ -382,7 +384,7 @@ def verify_dom_semantics(page, errors: list[str]) -> None:
             if (!video) {
                 issues.push('Missing #video-section <video> element');
             } else {
-                for (const attr of ['controls', 'width', 'height', 'preload', 'loading']) {
+                for (const attr of ['controls', 'width', 'height', 'preload']) {
                     if (!video.hasAttribute(attr)) {
                         issues.push('Missing attribute "' + attr + '" on <video>');
                     }
@@ -624,11 +626,11 @@ def run() -> int:
                 location = msg.location.get("url", "") if isinstance(msg.location, dict) else ""
                 if any(location.endswith(opt) for opt in OPTIONAL_PLACEHOLDER_PATHS):
                     return
-                if "Failed to load resource" in msg.text and any(
+                if not location and "Failed to load resource" in msg.text and any(
                     not (PUBLIC_DIR / opt.lstrip("/")).exists() for opt in OPTIONAL_PLACEHOLDER_PATHS
                 ):
                     return
-                unexpected_console_errors.append(msg.text)
+                unexpected_console_errors.append(f"{msg.text} ({location})" if location else msg.text)
 
             page.on("console", on_console)
 
@@ -888,9 +890,13 @@ def run() -> int:
                             f"Slider n={n}: expected row {EXPECTED_PASCAL_ROWS[n]!r}, got {actual_row!r}"
                         )
 
-                    css_val = slider.evaluate("el => el.style.getPropertyValue('--control-value').trim()")
-                    if css_val != str(n):
-                        errors.append(f"Slider n={n}: --control-value={css_val!r}")
+                    fill_width = page.locator(".slider-track__fill").evaluate("el => el.style.width.trim()")
+                    expected_pct = (n / 7) * 100
+                    actual_pct = float(fill_width.rstrip("%")) if fill_width.endswith("%") else -1.0
+                    if abs(actual_pct - expected_pct) > 0.05:
+                        errors.append(
+                            f"Slider n={n}: expected .slider-track__fill width ~{expected_pct:.2f}%, got {fill_width!r}"
+                        )
 
                     pressed_row = page.locator(f".pascal-row[data-row-index='{n}']").get_attribute(
                         "aria-pressed"
@@ -1010,7 +1016,7 @@ def run() -> int:
         print(f"\nE2E SUITE FAILED ({len(errors)} issue(s)).")
         return 1
 
-    print("\nALL E2E CHECKS PASSED CLEANLY (0 errors, 100% MathJax & zero overflow across 320px-1280px).")
+    print("\nALL E2E CHECKS PASSED CLEANLY (0 errors, 100% MathJax & zero overflow across 320px-1600px).")
     return 0
 
 

@@ -76,7 +76,6 @@
   --accent-signal-ink: #111111;
 
   /* Zero Rounded Corners, Zero Shadows & Max Container Width */
-  --radius-none: 0;
   --header-height: 3.75rem;
   --site-max-width: 90rem;
 
