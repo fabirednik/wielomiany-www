@@ -1,0 +1,13 @@
+/* ==========================================================================
+   wielomiany — Modular Stylesheet Entry Point
+   ========================================================================== */
+
+@import './tokens.css';
+@import './base.css';
+@import './components/navbar.css';
+@import './components/hero.css';
+@import './components/video-player.css';
+@import './components/theory-cards.css';
+@import './components/pascal-generator.css';
+@import './components/footer.css';
+@import './preferences.css';

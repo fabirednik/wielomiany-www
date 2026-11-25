@@ -1,0 +1,97 @@
+/* ==========================================================================
+   Navbar Component Styles — Flat Brutalist Header Rail
+   ========================================================================== */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  min-height: var(--header-height);
+  background-color: var(--bg-canvas);
+  border-bottom: 1px solid var(--rule-color);
+}
+
+.site-header__inner {
+  min-height: var(--header-height);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: var(--header-height);
+  padding: 0.5rem clamp(1rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--ink-primary);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark__square {
+  width: 0.9rem;
+  height: 0.9rem;
+  background-color: var(--accent-signal);
+  border: 1px solid var(--rule-color);
+  flex-shrink: 0;
+}
+
+.brand-mark__title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+}
+
+.site-nav {
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: stretch;
+}
+
+.site-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.site-nav__item {
+  display: flex;
+  border-top: 1px solid var(--rule-color);
+}
+
+@media (min-width: 640px) {
+  .site-nav__item {
+    border-top: 0;
+    border-left: 1px solid var(--rule-color);
+  }
+}
+
+.site-nav__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-primary);
+  transition: background-color 120ms linear, color 120ms linear;
+}
+
+@media (min-width: 768px) {
+  .site-nav__link {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.8125rem;
+  }
+}
+
+.site-nav__link:hover {
+  background-color: var(--bg-inverted);
+  color: var(--ink-inverse);
+}
