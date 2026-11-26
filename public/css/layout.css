@@ -1,0 +1,58 @@
+/* ==========================================================================
+   Application Wireframe Shell & Full-Width Section Headers
+   ========================================================================== */
+
+.app-shell {
+  width: 100%;
+  min-height: 100vh;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-canvas);
+}
+
+@media (min-width: 1080px) {
+  .app-shell {
+    width: calc(100% - 2rem);
+    max-width: var(--site-max-width);
+    border-inline: 1px solid var(--rule-color);
+  }
+}
+
+.main-content {
+  flex: 1 0 auto;
+  min-width: 0;
+}
+
+.main-content:focus {
+  outline: none;
+}
+
+.content-section {
+  border-bottom: 1px solid var(--rule-color);
+  background-color: var(--bg-canvas);
+}
+
+.section-header {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(2.25rem, 5vw, 4.5rem) clamp(1.25rem, 4vw, 3.5rem);
+  border-bottom: 1px solid var(--rule-color);
+  background-color: var(--accent-signal);
+  color: var(--accent-signal-ink);
+}
+
+.section-title {
+  font-size: clamp(2rem, 5.2vw, 4.25rem);
+  font-weight: 700;
+  line-height: 0.96;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: inherit;
+}
+
+.section-description {
+  font-size: 0.9375rem;
+  color: var(--ink-primary);
+  line-height: 1.5;
+}

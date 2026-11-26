@@ -1,0 +1,27 @@
+/* ==========================================================================
+   User Preference Overrides (Pointer & Motion)
+   ========================================================================== */
+
+@media (pointer: coarse) {
+  .exponent-step-btn,
+  .copy-btn,
+  .site-nav__link,
+  .site-footer__link {
+    min-height: 2.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .btn,
+  .copy-btn,
+  .exponent-step-btn,
+  .pascal-row,
+  .site-nav__link,
+  .site-footer__link {
+    transition: none;
+  }
+}

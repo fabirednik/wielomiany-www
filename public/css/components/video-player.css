@@ -1,0 +1,119 @@
+/* ==========================================================================
+   Video Player Component Styles — 30/70 Editorial Cinema Split
+   ========================================================================== */
+
+.video-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  background-color: var(--bg-canvas);
+}
+
+@media (min-width: 960px) {
+  .video-grid {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+  }
+}
+
+.video-rail {
+  min-width: 0;
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  background-color: var(--bg-surface);
+  color: var(--ink-primary);
+  border-bottom: 1px solid var(--rule-color);
+}
+
+@media (min-width: 960px) {
+  .video-rail {
+    border-bottom: 0;
+    border-right: 1px solid var(--rule-color);
+  }
+}
+
+.video-rail .section-title {
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+}
+
+.video-card {
+  margin: 0;
+  min-width: 0;
+  max-width: 100%;
+  background-color: var(--bg-inverted);
+  display: flex;
+  flex-direction: column;
+}
+
+.video-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  width: 100%;
+  background-color: var(--bg-inverted);
+}
+
+.video-frame__media {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.video-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  color: var(--ink-inverse);
+  background-color: var(--bg-inverted);
+}
+
+.video-placeholder[hidden] {
+  display: none;
+}
+
+.video-placeholder__icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: 1.25rem;
+  background-color: var(--accent-signal);
+  color: var(--accent-signal-ink);
+  border: 1px solid var(--bg-contrast);
+}
+
+.video-placeholder__icon {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.video-placeholder__title {
+  font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.45rem;
+}
+
+.video-placeholder__body {
+  max-width: 44ch;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: #D4D4CE;
+  overflow-wrap: anywhere;
+}
+
+.video-card__caption {
+  padding: 0.875rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--ink-primary);
+  background-color: var(--bg-contrast);
+  border-top: 1px solid var(--rule-color);
+}

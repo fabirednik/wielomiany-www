@@ -1,0 +1,175 @@
+/* ==========================================================================
+   Theory Cards Component Styles — Asymmetrical 12-Col Brutalist Wireframe Matrix
+   ========================================================================== */
+
+.formula-group {
+  background-color: var(--bg-canvas);
+}
+
+.formula-group__heading {
+  padding: 1rem clamp(1.25rem, 4vw, 3.5rem);
+  background-color: var(--bg-inverted);
+  color: var(--ink-inverse);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule-color);
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
+}
+
+@media (min-width: 960px) {
+  .cards-grid--asym-three,
+  .cards-grid--asym-four {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+
+.formula-card {
+  container-type: inline-size;
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.25rem;
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--rule-color);
+}
+
+/* Remove bottom border on final row on mobile */
+.formula-group:last-child .formula-card:last-child {
+  border-bottom: 0;
+}
+
+@media (min-width: 960px) {
+  .formula-card {
+    border-right: 1px solid var(--rule-color);
+  }
+
+  /* Asymmetrical row allocations summing strictly to 12 columns */
+  .cards-grid--asym-three .formula-card:nth-child(1) {
+    grid-column: span 7;
+  }
+
+  .cards-grid--asym-three .formula-card:nth-child(2) {
+    grid-column: span 5;
+    border-right: 0;
+  }
+
+  .cards-grid--asym-three .formula-card:nth-child(3) {
+    grid-column: span 12;
+    border-right: 0;
+  }
+
+  .cards-grid--asym-four .formula-card:nth-child(1) {
+    grid-column: span 5;
+  }
+
+  .cards-grid--asym-four .formula-card:nth-child(2) {
+    grid-column: span 7;
+    border-right: 0;
+  }
+
+  .cards-grid--asym-four .formula-card:nth-child(3) {
+    grid-column: span 7;
+    border-bottom: 0;
+  }
+
+  .cards-grid--asym-four .formula-card:nth-child(4) {
+    grid-column: span 5;
+    border-right: 0;
+    border-bottom: 0;
+  }
+}
+
+.formula-card__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.formula-card__title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.formula-card__title {
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.formula-card__math {
+  max-width: 100%;
+  padding: 1.15rem 0.75rem;
+  background-color: var(--bg-contrast);
+  border: 1px solid var(--rule-color);
+  color: var(--ink-primary);
+  font-size: clamp(1rem, 1.6vw, 1.2rem);
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.formula-card__meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.875rem;
+}
+
+@container (min-width: 660px) {
+  .formula-card__meta {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    align-items: end;
+    gap: 1.5rem;
+  }
+}
+
+.formula-card__desc {
+  font-size: 0.9375rem;
+  color: var(--ink-secondary);
+}
+
+.formula-card__example {
+  display: block;
+  max-width: 100%;
+  padding: 0.75rem 0.875rem;
+  background-color: var(--bg-canvas);
+  border: 1px solid var(--rule-color);
+  font-size: 0.875rem;
+}
+
+.formula-card__example-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+
+.formula-card__example-math {
+  display: block;
+  max-width: 100%;
+  color: var(--ink-primary);
+  font-weight: 500;
+}
+
+@media (max-width: 767px) {
+  .formula-card__math,
+  .formula-card__example {
+    overflow-x: auto;
+  }
+}
